@@ -15,8 +15,13 @@ Class {
 }
 
 { #category : #accessing }
-XtClient >> entity: entityId [
-	"Fetch entity by id"
+XtClient >> entity: id [
+	"Fetch an entity by id. Answer with an XtEntity instance."
+	| eid |
+	eid := String streamContents: [ :out | id writeEDNTo: out ].
+	^ self getRequest: 'entity' with: { 'eid-edn' -> eid } as: XtEntity  
+	
+
 ]
 
 { #category : #accessing }
@@ -25,9 +30,9 @@ XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	| requestUrl response |
 	requestUrl := String streamContents: [:out |
 		out << url; << path.
-		queryParameters doWithIndex: [ :i :param |
+		queryParameters doWithIndex: [ :param :i |
 		    i = 1 ifTrue: [ out << '?' ] ifFalse: [ out << '&' ].
-			out << param key; << param value.
+			out << param key; << '='; << param value.
 	    ]].
 	response := self getZnClient 
 	  accept: 'application/edn';
