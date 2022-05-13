@@ -32,3 +32,20 @@ XtEntity >> at: anAttributeName put: aValue [
 XtEntity >> initialize [
 	attributes := Dictionary new
 ]
+
+{ #category : #'as yet unclassified' }
+XtEntity >> inspectionAttributes: aBuilder [
+	<inspectorPresentationOrder: 0 title: 'Attributes'> 
+	
+	^ aBuilder newTable 
+		addColumn: (SpStringTableColumn 
+			title: 'Attribute'
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ])
+			beSortable;
+		addColumn: (SpStringTableColumn 
+			title: 'Value' 
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ])
+			beSortable;
+		items: (attributes associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
+		yourself
+]
