@@ -22,16 +22,17 @@ XtClient >> entity: entityId [
 { #category : #accessing }
 XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	"Issue GET request to XTDB with given parameters"
-	| requestUrl |
+	| requestUrl response |
 	requestUrl := String streamContents: [:out |
 		out << url; << path.
 		queryParameters doWithIndex: [ :i :param |
 		    i = 1 ifTrue: [ out << '?' ] ifFalse: [ out << '&' ].
 			out << param key; << param value.
 	    ]].
-	self getZnClient 
-	   	  accept: 'application/edn'
-	  get: requestUrl
+	response := self getZnClient 
+	  accept: 'application/edn';
+	  get: requestUrl.
+	^ self parseResponse: response as: aResultClass
 ]
 
 { #category : #accessing }
@@ -39,6 +40,39 @@ XtClient >> getZnClient [
 	"Get (creating it if necessary) the ZnClient instance."
 	znClient ifNil: [ znClient := ZnClient new ].
 	^ znClient
+]
+
+{ #category : #parsing }
+XtClient >> parseResponse: response as: aClass [
+	| edn obj |
+	edn := EDNReader new in: response asString readStream; read.
+	obj := aClass new.
+	aClass xtMapping populate: obj from: edn. 
+  ^ obj
+
+	
+]
+
+{ #category : #'as yet unclassified' }
+XtClient >> populateFields: anObject from: aDictionary mapping: aMappingDictionary [
+	"Populate fields of anObject from aDictionary using aMappingDictionary
+	to translate keys in aDictionary to setter method names."
+	aMappingDictionary keysAndValuesDo: [ :key :value |
+		(aDictionary includes: key) ifTrue: [ 
+			anObject perform: value with: (aDictionary at: key)
+		]
+	]
+]
+
+{ #category : #'as yet unclassified' }
+XtClient >> populateFieldsByName: anObject from: aDictionary [
+	Error signal: 'Not implemented yet, use xtMapping for now.'
+]
+
+{ #category : #accessing }
+XtClient >> status [ 
+	"Fetch the XTDB node status"
+	^ self getRequest: 'status' with: {} as: XtStatus  
 ]
 
 { #category : #accessing }
