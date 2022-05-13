@@ -25,6 +25,16 @@ XtClient >> entity: id [
 ]
 
 { #category : #accessing }
+XtClient >> entity: id as: aClass [
+	"Fetch an entity by id as an instance of aClass."
+	| eid |
+	eid := String streamContents: [ :out | id writeEDNTo: out ].
+	^ self getRequest: 'entity' with: { 'eid-edn' -> eid } as: aClass  
+	
+
+]
+
+{ #category : #accessing }
 XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	"Issue GET request to XTDB with given parameters"
 	| requestUrl response |
@@ -72,6 +82,13 @@ XtClient >> populateFields: anObject from: aDictionary mapping: aMappingDictiona
 { #category : #'as yet unclassified' }
 XtClient >> populateFieldsByName: anObject from: aDictionary [
 	Error signal: 'Not implemented yet, use xtMapping for now.'
+]
+
+{ #category : #accessing }
+XtClient >> query: aBlock [
+	"Build and execute a query.
+	aBlock is called with an XtQueryBuilder instance."	
+	
 ]
 
 { #category : #accessing }
