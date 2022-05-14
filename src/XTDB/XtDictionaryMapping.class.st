@@ -6,7 +6,7 @@ By default the setter I call is: #at:put:
 
 "
 Class {
-	#name : #XtNoMapping,
+	#name : #XtDictionaryMapping,
 	#superclass : #XtMapping,
 	#instVars : [
 		'setter'
@@ -15,12 +15,12 @@ Class {
 }
 
 { #category : #initialization }
-XtNoMapping >> initialize [ 
+XtDictionaryMapping >> initialize [ 
 	setter := #at:put:
 ]
 
 { #category : #'as yet unclassified' }
-XtNoMapping >> populate: anObject from: aDictionary [
+XtDictionaryMapping >> populate: anObject from: aDictionary [
 	aDictionary keysAndValuesDo: [ :key :value |
 		anObject perform: setter with: key with: value ]
 ]

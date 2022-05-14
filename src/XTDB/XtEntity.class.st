@@ -15,7 +15,7 @@ Class {
 
 { #category : #accessing }
 XtEntity class >> xtMapping [
-	^ XtNoMapping new
+	^ XtDictionaryMapping new
 ]
 
 { #category : #accessing }

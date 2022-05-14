@@ -57,6 +57,15 @@ XtClient >> getZnClient [
 	^ znClient
 ]
 
+{ #category : #'as yet unclassified' }
+XtClient >> instancesOf: anEntityClass [
+	"Return a virtual collection of instances that of the given class.
+	The collection supports a subset of the Collection protocols."
+	^ XtEntityCollection new 
+	    client: self;
+	    entityClass: anEntityClass; yourself  
+]
+
 { #category : #parsing }
 XtClient >> parseResponse: response as: aClass [
 	| edn obj |
@@ -82,6 +91,26 @@ XtClient >> populateFields: anObject from: aDictionary mapping: aMappingDictiona
 { #category : #'as yet unclassified' }
 XtClient >> populateFieldsByName: anObject from: aDictionary [
 	Error signal: 'Not implemented yet, use xtMapping for now.'
+]
+
+{ #category : #'as yet unclassified' }
+XtClient >> q: aBlock [
+	"Build and execute query, returns raw response."
+	| qb |
+	qb := XtQueryBuilder new.
+	aBlock value: qb.
+	^ qb executeOn: self
+]
+
+{ #category : #'as yet unclassified' }
+XtClient >> q: anEntityClass matching: aPredicateBlock [
+	"Query instances of an entity class that match a predicate."
+	| qb |
+	qb := XtQueryBuilder new.
+	aPredicateBlock value: (XtEntityPredicateBuilder new 
+	  queryBuilder: qb;
+	  entityClass: anEntityClass).
+	^ qb executeOn: self
 ]
 
 { #category : #accessing }
