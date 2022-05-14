@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+XtMapping >> allAttributes [
+	^ keywordSetters keys asOrderedCollection 
+]
+
+{ #category : #'as yet unclassified' }
 XtMapping >> attributeFor: aGetterSelector [
 	^ getterKeywords at: aGetterSelector ifAbsent: [ Error signal: 'Unknown XTDB attribute for getter: ', aGetterSelector  ]
 ]

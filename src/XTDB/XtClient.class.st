@@ -105,11 +105,15 @@ XtClient >> q: aBlock [
 { #category : #'as yet unclassified' }
 XtClient >> q: anEntityClass matching: aPredicateBlock [
 	"Query instances of an entity class that match a predicate."
-	| qb |
+	| qb eb mapping |
 	qb := XtQueryBuilder new.
-	aPredicateBlock value: (XtEntityPredicateBuilder new 
+	mapping := anEntityClass xtMapping.
+	eb := XtEntityPredicateBuilder new 
 	  queryBuilder: qb;
-	  entityClass: anEntityClass).
+	  entityClass: anEntityClass;
+	  mapping: mapping.
+	qb pull: #e attrs: mapping allAttributes. 
+	aPredicateBlock value: eb.
 	^ qb executeOn: self
 ]
 
