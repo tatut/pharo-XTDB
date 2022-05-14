@@ -13,13 +13,32 @@ Class {
 
 { #category : #initialization }
 XtQueryResult >> initialize [ 
-  resultClass  := Dictionary 
+  resultClass  := OrderedCollection  
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryResult >> inspectionResults: aBuilder [
+	<inspectorPresentationOrder: 0 title: 'Query results'> 
+	
+	^ aBuilder newTable		
+		addColumn: (SpIndexTableColumn new 
+			title: 'Index';
+			sortFunction: #yourself ascending;
+			beNotExpandable;
+			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Value'; 
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each ];
+			sortFunction: #printString ascending;
+			yourself);
+		items: results asOrderedCollection;
+		yourself
 ]
 
 { #category : #'instance creation' }
 XtQueryResult >> new [ 
-	"Create a new result type object"
-  ^ resultClass new
+	"Return self"
+  ^ self
 ]
 
 { #category : #'as yet unclassified' }
@@ -29,7 +48,13 @@ XtQueryResult >> populate: aQueryResult from: aResultList [
 	aQueryResult results: (aResultList collect: [ :result |
 		| obj |
 		obj := resultClass new.
-		resultMapping populate: obj from: result ])
+		resultMapping populate: obj from: result.
+	   obj ])
+]
+
+{ #category : #accessing }
+XtQueryResult >> resultClass: aClass [ 
+  resultClass  := aClass
 ]
 
 { #category : #accessing }

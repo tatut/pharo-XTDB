@@ -50,6 +50,16 @@ Person >> address: anObject [
 	address := anObject
 ]
 
+{ #category : #printing }
+Person >> asString [ 
+	^ 'a Person (', firstName ,' ', lastName, ')'
+]
+
+{ #category : #printing }
+Person >> displayStringOn: out [ 
+	out << 'a Person ('; << firstName; << ' '; << lastName; << ')'
+]
+
 { #category : #accessing }
 Person >> email [
 
@@ -108,4 +118,9 @@ Person >> lastName [
 Person >> lastName: anObject [
 
 	lastName := anObject
+]
+
+{ #category : #printing }
+Person >> printString [ 
+	^ 'a Person (', firstName ,' ', lastName, ')'
 ]

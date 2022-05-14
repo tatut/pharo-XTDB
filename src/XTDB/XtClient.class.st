@@ -107,6 +107,7 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	"Query instances of an entity class that match a predicate."
 	| qb eb mapping |
 	qb := XtQueryBuilder new.
+	qb result: (XtEntityPullMapping new entityClass: anEntityClass). 
 	mapping := anEntityClass xtMapping.
 	eb := XtEntityPredicateBuilder new 
 	  queryBuilder: qb;

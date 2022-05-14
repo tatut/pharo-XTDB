@@ -9,7 +9,7 @@ Class {
 		'find',
 		'where',
 		'in',
-		'responseClass'
+		'result'
 	],
 	#category : #XTDB
 }
@@ -27,7 +27,7 @@ XtQueryBuilder >> executeOn: anXtClient [
 	queryArgs := OrderedCollection with: 'query-edn' -> (EDNWriter toEDNString: q).
 	in ifNotEmpty: [ queryArgs add: 'in-args-edn' -> (EDNWriter toEDNString: (inArgs collect: #value) asOrderedCollection) ].
 	Transcript show: queryArgs printString;cr.
-	^ anXtClient getRequest: 'query' with: queryArgs as: responseClass new
+	^ anXtClient getRequest: 'query' with: queryArgs as: result
 	
 ]
 
@@ -41,13 +41,18 @@ XtQueryBuilder >> initialize [
 	find := OrderedCollection new.
 	where := OrderedCollection new.
 	in := Dictionary new. "arguments name -> value"
-	responseClass := XtQueryResult "default to generic query result"
+	result := XtQueryResult new "default to generic query result"
 ]
 
 { #category : #'as yet unclassified' }
 XtQueryBuilder >> pull: aName attrs: anAttributeCollection [
 	"Specify a find clause that pulls the named attributes from the named logic variable."
 	find add: (LinkedList with: #pull with: aName with: anAttributeCollection asOrderedCollection)
+]
+
+{ #category : #accessing }
+XtQueryBuilder >> result: aResultMapping [
+	result := aResultMapping 
 ]
 
 { #category : #'as yet unclassified' }
