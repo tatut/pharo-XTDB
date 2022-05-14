@@ -35,8 +35,6 @@ XtMapping >> map: aMapping [
 XtMapping >> populate: anObject from: aDictionary [
 	"Populate anObject fields from aDictionary using this mapping."
 	keywordSetters keysAndValuesDo: [ :key :value |
-		Transcript show: 'key: ', key;cr.
 		(aDictionary includesKey: key) ifTrue: [ 
-			Transcript show: 'onpa avain:', key, ' => ', value asString;cr.
 			anObject perform: value with: (aDictionary at: key) ] ]
 ]

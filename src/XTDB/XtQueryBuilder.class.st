@@ -17,17 +17,20 @@ Class {
 { #category : #execution }
 XtQueryBuilder >> executeOn: anXtClient [
 	"Execute the query built on the given client"
-	| q inArgs queryArgs |
+	| q inArgs queryEdn queryArgs res |
 	q := Dictionary new.
 	q at: #':find' put: find;
 	  at: #':where' put: where.
 	in ifNotEmpty: [ 
 		inArgs := in associations.
 		q at: #':in' put: (inArgs collect: #key) asOrderedCollection ].
-	queryArgs := OrderedCollection with: 'query-edn' -> (EDNWriter toEDNString: q).
+	queryEdn := (EDNWriter toEDNString: q).
+	queryArgs := OrderedCollection with: 'query-edn' -> queryEdn.
 	in ifNotEmpty: [ queryArgs add: 'in-args-edn' -> (EDNWriter toEDNString: (inArgs collect: #value) asOrderedCollection) ].
 	Transcript show: queryArgs printString;cr.
-	^ anXtClient getRequest: 'query' with: queryArgs as: result
+	res := anXtClient getRequest: 'query' with: queryArgs as: result.
+	res queryEdn: queryEdn args: in.
+	^ res
 	
 ]
 

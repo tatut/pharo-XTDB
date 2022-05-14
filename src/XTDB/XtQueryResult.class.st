@@ -6,7 +6,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'results',
-		'resultClass'
+		'resultClass',
+		'queryEdn',
+		'queryArgs'
 	],
 	#category : #XTDB
 }
@@ -14,6 +16,49 @@ Class {
 { #category : #initialization }
 XtQueryResult >> initialize [ 
   resultClass  := OrderedCollection  
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryResult >> inspectionQuery: aBuilder [
+	<inspectorPresentationOrder: 1 title: 'Datalog'> 
+  | components |
+  ^ aBuilder newText text: queryEdn; beWrapWord; yourself.
+
+"	components := aBuilder newComponentList.
+	
+	components addPresenter: (aBuilder newText text: queryEdn; beWrapWord; yourself).
+	components addPresenter: (aBuilder newTable
+		addColumn: (SpStringTableColumn new 
+			title: 'Name';
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ];
+			sortFunction: #printString ascending;
+			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Value'; 
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
+			sortFunction: #printString ascending;
+			yourself);
+		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
+		yourself).
+	^ components    "
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryResult >> inspectionQueryInParameters: aBuilder [
+	<inspectorPresentationOrder: 2 title: 'Query parameters'> 
+	^ aBuilder newTable
+		addColumn: (SpStringTableColumn new 
+			title: 'Name';
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ];
+			sortFunction: #printString ascending;
+			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Value'; 
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
+			sortFunction: #printString ascending;
+			yourself);
+		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
+		yourself.
 ]
 
 { #category : #'as yet unclassified' }
@@ -50,6 +95,14 @@ XtQueryResult >> populate: aQueryResult from: aResultList [
 		obj := resultClass new.
 		resultMapping populate: obj from: result.
 	   obj ])
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryResult >> queryEdn: edn args: args [
+ "Store the EDN query and arguments, for inspection purposes"
+ queryEdn := edn.
+ queryArgs := args
+
 ]
 
 { #category : #accessing }
