@@ -20,19 +20,31 @@ XtQueryResult >> initialize [
 
 { #category : #'as yet unclassified' }
 XtQueryResult >> inspectionQuery: aBuilder [
-	<inspectorPresentationOrder: 1 title: 'Datalog'> 
+	<inspectorPresentationOrder: 1 title: 'Datalog & parameters'> 
   | components |
-  ^ aBuilder newText text: queryEdn; beWrapWord; yourself.
-
-"	components := aBuilder newComponentList.
-	
-	components addPresenter: (aBuilder newText text: queryEdn; beWrapWord; yourself).
-	components addPresenter: (aBuilder newTable
+  components := aBuilder newPresenter.
+  components layout: (SpPanedLayout newTopToBottom
+    add: (aBuilder newText text: queryEdn; beWrapWord; yourself);
+    add: (aBuilder newTable
 		addColumn: (SpStringTableColumn new 
 			title: 'Name';
 			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ];
 			sortFunction: #printString ascending;
 			yourself);
+		addColumn: (SpStringTableColumn new  
+			title: 'Value'; 
+			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
+			sortFunction: #printString ascending;
+			yourself);
+		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
+		yourself);
+    positionOfSlider: 33 percent;
+    yourself).
+  ^ components
+"	components := aBuilder newComponentList.
+	
+	components addPresenter: (aBuilder newText text: queryEdn; beWrapWord; yourself).
+	components addPresenter: 
 		addColumn: (SpStringTableColumn new  
 			title: 'Value'; 
 			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
@@ -41,24 +53,6 @@ XtQueryResult >> inspectionQuery: aBuilder [
 		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
 		yourself).
 	^ components    "
-]
-
-{ #category : #'as yet unclassified' }
-XtQueryResult >> inspectionQueryInParameters: aBuilder [
-	<inspectorPresentationOrder: 2 title: 'Query parameters'> 
-	^ aBuilder newTable
-		addColumn: (SpStringTableColumn new 
-			title: 'Name';
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ];
-			sortFunction: #printString ascending;
-			yourself);
-		addColumn: (SpStringTableColumn new  
-			title: 'Value'; 
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
-			sortFunction: #printString ascending;
-			yourself);
-		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
-		yourself.
 ]
 
 { #category : #'as yet unclassified' }
