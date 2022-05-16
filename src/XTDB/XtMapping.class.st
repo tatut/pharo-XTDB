@@ -32,9 +32,9 @@ XtMapping >> map: aMapping [
 ]
 
 { #category : #'as yet unclassified' }
-XtMapping >> populate: anObject from: aDictionary [
+XtMapping >> xtPopulate: anObject from: aDictionary [
 	"Populate anObject fields from aDictionary using this mapping."
 	keywordSetters keysAndValuesDo: [ :key :value |
 		(aDictionary includesKey: key) ifTrue: [ 
-			anObject perform: value with: (aDictionary at: key) ] ]
+			value xtPopulate: anObject from: (aDictionary at: key) ] ]
 ]

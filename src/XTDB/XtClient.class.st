@@ -71,7 +71,7 @@ XtClient >> parseResponse: response as: aClass [
 	| edn obj |
 	edn := EDNReader new in: response asString readStream; read.
 	obj := aClass new.
-	aClass xtMapping populate: obj from: edn. 
+	aClass xtMapping xtPopulate: obj from: edn. 
   ^ obj
 
 	

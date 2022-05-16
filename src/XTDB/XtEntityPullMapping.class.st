@@ -19,22 +19,22 @@ XtEntityPullMapping >> new [
   ^ XtQueryResult new
 ]
 
+{ #category : #accessing }
+XtEntityPullMapping >> xtMapping [ 
+  ^ self
+
+]
+
 { #category : #'as yet unclassified' }
-XtEntityPullMapping >> populate: xtQueryResult from: resultList [  
+XtEntityPullMapping >> xtPopulate: xtQueryResult from: resultList [  
   | results |
   results := OrderedCollection new.
   resultList do: [ :result |
 	  | obj pull |
 	  pull := result first.
 	  obj := entityClass new.
-	  entityMapping populate: obj from: pull.
+	  entityMapping xtPopulate: obj from: pull.
 	  results add: obj
 	].
   xtQueryResult results: results
-]
-
-{ #category : #accessing }
-XtEntityPullMapping >> xtMapping [ 
-  ^ self
-
 ]

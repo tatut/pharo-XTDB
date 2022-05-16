@@ -11,14 +11,14 @@ Class {
 	#category : #XTDB
 }
 
-{ #category : #'as yet unclassified' }
-XtRawResponse class >> populate: aRawResponse from: anObject [
-	aRawResponse response: anObject
-]
-
 { #category : #accessing }
 XtRawResponse class >> xtMapping [
 	^ self
+]
+
+{ #category : #'as yet unclassified' }
+XtRawResponse class >> xtPopulate: aRawResponse from: anObject [
+	aRawResponse response: anObject
 ]
 
 { #category : #accessing }

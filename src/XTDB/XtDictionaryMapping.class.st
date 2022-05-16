@@ -20,7 +20,7 @@ XtDictionaryMapping >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-XtDictionaryMapping >> populate: anObject from: aDictionary [
+XtDictionaryMapping >> xtPopulate: anObject from: aDictionary [
 	aDictionary keysAndValuesDo: [ :key :value |
 		anObject perform: setter with: key with: value ]
 ]

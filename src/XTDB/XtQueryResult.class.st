@@ -18,7 +18,7 @@ XtQueryResult >> initialize [
   resultClass  := OrderedCollection  
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspecting }
 XtQueryResult >> inspectionQuery: aBuilder [
 	<inspectorPresentationOrder: 1 title: 'Datalog & parameters'> 
   | components |
@@ -43,7 +43,7 @@ XtQueryResult >> inspectionQuery: aBuilder [
   ^ components
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspecting }
 XtQueryResult >> inspectionResults: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Query results'> 
 	
@@ -66,17 +66,6 @@ XtQueryResult >> inspectionResults: aBuilder [
 XtQueryResult >> new [ 
 	"Return self"
   ^ self
-]
-
-{ #category : #'as yet unclassified' }
-XtQueryResult >> populate: aQueryResult from: aResultList [ 
-  | resultMapping |
-  resultMapping := resultClass xtMapping.
-	aQueryResult results: (aResultList collect: [ :result |
-		| obj |
-		obj := resultClass new.
-		resultMapping populate: obj from: result.
-	   obj ])
 ]
 
 { #category : #'as yet unclassified' }
@@ -106,4 +95,15 @@ XtQueryResult >> results: aResultList [
 XtQueryResult >> xtMapping [ 
   ^ self
 
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryResult >> xtPopulate: aQueryResult from: aResultList [ 
+  | resultMapping |
+  resultMapping := resultClass xtMapping.
+	aQueryResult results: (aResultList collect: [ :result |
+		| obj |
+		obj := resultClass new.
+		resultMapping xtPopulate: obj from: result.
+	   obj ])
 ]

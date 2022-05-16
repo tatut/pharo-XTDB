@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-XtOrderedMapping class >> populate: obj from: coll [
+XtOrderedMapping class >> xtPopulate: obj from: coll [
 	obj addAll: coll
 ]
