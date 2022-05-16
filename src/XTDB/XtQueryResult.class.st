@@ -41,18 +41,6 @@ XtQueryResult >> inspectionQuery: aBuilder [
     positionOfSlider: 33 percent;
     yourself).
   ^ components
-"	components := aBuilder newComponentList.
-	
-	components addPresenter: (aBuilder newText text: queryEdn; beWrapWord; yourself).
-	components addPresenter: 
-		addColumn: (SpStringTableColumn new  
-			title: 'Value'; 
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ];
-			sortFunction: #printString ascending;
-			yourself);
-		items: (queryArgs associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
-		yourself).
-	^ components    "
 ]
 
 { #category : #'as yet unclassified' }
