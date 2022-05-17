@@ -1,40 +1,26 @@
+"
+I am the base class for mappings. Don't instantiate me directly.
+
+Mappings provide a way to map values to/from XTDB.
+
+"
 Class {
 	#name : #XtMapping,
 	#superclass : #Object,
 	#instVars : [
 		'keywordSetters',
-		'getterKeywords'
+		'getterKeywords',
+		'keywordMapping'
 	],
 	#category : #XTDB
 }
 
 { #category : #'as yet unclassified' }
-XtMapping >> allAttributes [
-	^ keywordSetters keys asOrderedCollection 
-]
-
-{ #category : #'as yet unclassified' }
-XtMapping >> attributeFor: aGetterSelector [
-	^ getterKeywords at: aGetterSelector ifAbsent: [ Error signal: 'Unknown XTDB attribute for getter: ', aGetterSelector  ]
-]
-
-{ #category : #initialization }
-XtMapping >> initialize [
-	keywordSetters := Dictionary new. "map XTDB attribute to setter selector"
-	getterKeywords := Dictionary new. "map getter selector to XTDB attribute"
-]
-
-{ #category : #'accessing - structure variables' }
-XtMapping >> map: aMapping [
-	"Map keyword to setter."
-	keywordSetters add: aMapping.
-	getterKeywords add: aMapping value allButLast asSymbol -> aMapping key
+XtMapping >> asXtPullPattern [
+	self subclassResponsibility 
 ]
 
 { #category : #'as yet unclassified' }
 XtMapping >> xtPopulate: anObject from: aDictionary [
-	"Populate anObject fields from aDictionary using this mapping."
-	keywordSetters keysAndValuesDo: [ :key :value |
-		(aDictionary includesKey: key) ifTrue: [ 
-			value xtPopulate: anObject from: (aDictionary at: key) ] ]
+	self subclassResponsibility 
 ]

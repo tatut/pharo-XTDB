@@ -113,7 +113,7 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	  queryBuilder: qb;
 	  entityClass: anEntityClass;
 	  mapping: mapping.
-	qb pull: #e attrs: mapping allAttributes. 
+	qb pull: #e attrs: mapping asXtPullPattern. 
 	aPredicateBlock value: eb.
 	^ qb executeOn: self
 ]

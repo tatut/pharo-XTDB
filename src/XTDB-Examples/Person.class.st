@@ -8,22 +8,24 @@ Class {
 		'jobTitle',
 		'gender',
 		'email',
-		'_xtId'
+		'_xtId',
+		'company'
 	],
 	#category : #'XTDB-Examples'
 }
 
 { #category : #accessing }
 Person class >> xtMapping [
-	^ XtMapping new 
-	map: #':last-name' -> #lastName:;
-	map: #':first-name' -> #firstName:;
-	map: #':address' -> #address:;
-	map: #':job-title' -> #jobTitle:;
-	map: #':gender' -> #gender:;
-	map: #':email' -> #email:;
-	map: #':xt/id' -> #_xtId:;
-	yourself
+	^ XtEntityMapping withAll: {  
+    #':last-name' -> #lastName .
+    #':first-name' -> #firstName .
+    #':address' -> #address .
+    #':job-title' -> #jobTitle .
+    #':gender' -> #gender .
+    #':email' -> #email .
+    XtLinkMapping of: #':company' -> #company to: Company .
+    #':xt/id' -> #_xtId 
+  }
 ]
 
 { #category : #accessing }
@@ -53,6 +55,18 @@ Person >> address: anObject [
 { #category : #printing }
 Person >> asString [ 
 	^ 'a Person (', firstName ,' ', lastName, ')'
+]
+
+{ #category : #accessing }
+Person >> company [
+
+	^ company
+]
+
+{ #category : #accessing }
+Person >> company: anObject [
+
+	company := anObject
 ]
 
 { #category : #printing }
