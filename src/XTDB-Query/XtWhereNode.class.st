@@ -48,6 +48,13 @@ XtWhereNode >> inParameters [
 	^ { }
 ]
 
+{ #category : #'as yet unclassified' }
+XtWhereNode >> prewalk: aBlock [
+	"Call block with self and then with all children of self"
+	aBlock value: self.
+	self children do: [ :c | c prewalk: aBlock ]
+]
+
 { #category : #rendering }
 XtWhereNode >> render [
   "Render to where clause object that is serialized to EDN."
