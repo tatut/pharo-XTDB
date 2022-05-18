@@ -6,13 +6,13 @@ Class {
 		'attribute',
 		'predicateBuilder'
 	],
-	#category : #XTDB
+	#category : #'XTDB-Query'
 }
 
 { #category : #comparing }
 XtEntityPredicateAttrRef >> = otherObject [ 
 	"Add EAV pattern"
-	predicateBuilder addEquals: entity attr: attribute value: otherObject
+	^ self whereNode: (XtWhereEAV new e: entity a: attribute v: otherObject; yourself)
 ]
 
 { #category : #accessing }
@@ -35,9 +35,12 @@ XtEntityPredicateAttrRef >> predicateBuilder: anObject [
 
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> textSearch: aLuceneSearchString [
-  | param |
-  param := predicateBuilder addIn: aLuceneSearchString.
-	predicateBuilder addWhere: 
-		{ LinkedList withAll: { #'text-search' . attribute . param } .
-		  OrderedCollection with: (OrderedCollection with: #e) } asOrderedCollection 
+  ^ self whereNode: (XtWhereTextSearch new e: #e a: attribute v: aLuceneSearchString; yourself)
+
+]
+
+{ #category : #'as yet unclassified' }
+XtEntityPredicateAttrRef >> whereNode: aNode [
+	aNode id: predicateBuilder nextId.
+	^ aNode
 ]

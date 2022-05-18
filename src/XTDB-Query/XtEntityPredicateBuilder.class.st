@@ -1,3 +1,8 @@
+"
+I am a proxy object for an entity class passed to filter predicate blocks.
+I generate Datalog where clauses (and required :in parameters) based on the
+method calls made on the object.
+"
 Class {
 	#name : #XtEntityPredicateBuilder,
 	#superclass : #Object,
@@ -5,9 +10,9 @@ Class {
 		'queryBuilder',
 		'entityClass',
 		'mapping',
-		'parameterIndex'
+		'index'
 	],
-	#category : #XTDB
+	#category : #'XTDB-Query'
 }
 
 { #category : #adding }
@@ -47,12 +52,20 @@ XtEntityPredicateBuilder >> entityClass: anObject [
 
 { #category : #initialization }
 XtEntityPredicateBuilder >> initialize [
-	parameterIndex := 0
+	index := 0
 ]
 
 { #category : #accessing }
 XtEntityPredicateBuilder >> mapping: anObject [
 	mapping := anObject
+]
+
+{ #category : #accessing }
+XtEntityPredicateBuilder >> nextIndex [
+	| idx |
+	idx := index.
+	idx := idx + 1.
+	^ idx
 ]
 
 { #category : #accessing }

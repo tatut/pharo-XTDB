@@ -11,7 +11,7 @@ Class {
 		'in',
 		'result'
 	],
-	#category : #XTDB
+	#category : #'XTDB-Query'
 }
 
 { #category : #execution }
