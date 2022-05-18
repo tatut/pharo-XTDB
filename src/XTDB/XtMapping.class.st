@@ -7,11 +7,6 @@ Mappings provide a way to map values to/from XTDB.
 Class {
 	#name : #XtMapping,
 	#superclass : #Object,
-	#instVars : [
-		'keywordSetters',
-		'getterKeywords',
-		'keywordMapping'
-	],
 	#category : #XTDB
 }
 

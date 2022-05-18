@@ -21,15 +21,6 @@ XtEntityPredicateBuilder >> addEquals: entity attr: attr value: value [
 ]
 
 { #category : #adding }
-XtEntityPredicateBuilder >> addIn: aParameterValue [
-	| name |
-	name := ('p',parameterIndex asString) asSymbol.
-	parameterIndex := parameterIndex + 1.
-	queryBuilder in: name value: aParameterValue.
-	^ name
-]
-
-{ #category : #adding }
 XtEntityPredicateBuilder >> addWhere: clause [
 	queryBuilder where: clause
 ]
@@ -64,7 +55,7 @@ XtEntityPredicateBuilder >> mapping: anObject [
 XtEntityPredicateBuilder >> nextIndex [
 	| idx |
 	idx := index.
-	idx := idx + 1.
+	index := idx + 1.
 	^ idx
 ]
 

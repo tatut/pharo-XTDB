@@ -57,7 +57,20 @@ XtWhereNode >> render [
 { #category : #rendering }
 XtWhereNode >> renderToplevel [ 
 	"Render to toplevel where clause object that is serialized as EDN"
-	^ self render
+	^ OrderedCollection with: self render
+]
+
+{ #category : #'as yet unclassified' }
+XtWhereNode >> simplify [
+	"Return a simplified version of the node. Default just returns self"
+	^ self
+]
+
+{ #category : #'as yet unclassified' }
+XtWhereNode >> unwrap [
+	"Return unwrapped and clauses or array of self."
+	^ { self }
+
 ]
 
 { #category : #'logical operations' }

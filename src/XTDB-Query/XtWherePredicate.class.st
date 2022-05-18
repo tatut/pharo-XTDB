@@ -17,6 +17,13 @@ XtWherePredicate >> inParameters [
 	^ { (self inName: 'p') -> v }
 ]
 
+{ #category : #'as yet unclassified' }
+XtWherePredicate >> predicate: aPredicateName lvar: aLogicVar val: aValue [
+	predicate  := aPredicateName.
+	lvar := aLogicVar.
+	v := aValue.
+]
+
 { #category : #rendering }
 XtWherePredicate >> render [
 	^ OrderedCollection with:

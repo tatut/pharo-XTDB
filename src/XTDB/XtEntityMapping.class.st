@@ -19,7 +19,8 @@ XtEntityMapping >> asXtPullPattern [
 
 { #category : #'as yet unclassified' }
 XtEntityMapping >> attributeFor: getter [
-	^ (fieldMappings detect: [ :fm | fm getter = getter ]) attribute
+	^ (fieldMappings detect: [ :fm | fm getter = getter ]
+		ifNone: [ Error signal: 'No XTDB attributed mapped for accessor: ', getter ]) attribute
 ]
 
 { #category : #accessing }

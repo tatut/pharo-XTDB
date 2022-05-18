@@ -38,3 +38,9 @@ XtWhereClauses >> render [
 	self children collect: #render into: lst.
 	^ lst
 ]
+
+{ #category : #'as yet unclassified' }
+XtWhereClauses >> simplify [
+	clauses := clauses collect: #simplify.
+	^ self
+]

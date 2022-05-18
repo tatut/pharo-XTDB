@@ -10,9 +10,29 @@ Class {
 }
 
 { #category : #comparing }
+XtEntityPredicateAttrRef >> < otherObject [ 
+	^ self wherePredicateNode: #< value: otherObject 
+]
+
+{ #category : #comparing }
+XtEntityPredicateAttrRef >> <= otherObject [ 
+	^ self wherePredicateNode: #<= value: otherObject 
+]
+
+{ #category : #comparing }
 XtEntityPredicateAttrRef >> = otherObject [ 
 	"Add EAV pattern"
-	^ self whereNode: (XtWhereEAV new e: entity a: attribute v: otherObject; yourself)
+	^ self nodeWithId: (XtWhereEAV new e: entity a: attribute v: otherObject; yourself)
+]
+
+{ #category : #comparing }
+XtEntityPredicateAttrRef >> > otherObject [ 
+	^ self wherePredicateNode: #> value: otherObject 
+]
+
+{ #category : #comparing }
+XtEntityPredicateAttrRef >> >= otherObject [ 
+	^ self wherePredicateNode: #>= value: otherObject 
 ]
 
 { #category : #accessing }
@@ -27,6 +47,12 @@ XtEntityPredicateAttrRef >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+XtEntityPredicateAttrRef >> nodeWithId: aNode [
+	aNode id: predicateBuilder nextIndex asString.
+	^ aNode
+]
+
 { #category : #accessing }
 XtEntityPredicateAttrRef >> predicateBuilder: anObject [
 
@@ -35,12 +61,21 @@ XtEntityPredicateAttrRef >> predicateBuilder: anObject [
 
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> textSearch: aLuceneSearchString [
-  ^ self whereNode: (XtWhereTextSearch new e: #e a: attribute v: aLuceneSearchString; yourself)
+  ^ self nodeWithId: (XtWhereTextSearch new e: #e a: attribute v: aLuceneSearchString; yourself)
 
 ]
 
 { #category : #'as yet unclassified' }
-XtEntityPredicateAttrRef >> whereNode: aNode [
-	aNode id: predicateBuilder nextId.
-	^ aNode
+XtEntityPredicateAttrRef >> wherePredicateNode: op [
+	^ self nodeWithId: (XtWherePredicate new operation: op; e: entity )
+]
+
+{ #category : #'as yet unclassified' }
+XtEntityPredicateAttrRef >> wherePredicateNode: op value: val [
+  | lvar |
+  lvar := #v,predicateBuilder nextIndex asString.
+	^ XtWhereAnd new 
+		add: (XtWhereBindEA new e: entity a: attribute lvar: lvar; yourself);
+		add: (self nodeWithId: (XtWherePredicate new predicate: op lvar: lvar val: val));
+		yourself
 ]

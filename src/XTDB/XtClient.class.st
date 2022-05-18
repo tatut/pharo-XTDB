@@ -105,7 +105,7 @@ XtClient >> q: aBlock [
 { #category : #'as yet unclassified' }
 XtClient >> q: anEntityClass matching: aPredicateBlock [
 	"Query instances of an entity class that match a predicate."
-	| qb eb mapping |
+	| qb eb mapping where |
 	qb := XtQueryBuilder new.
 	qb result: (XtEntityPullMapping new entityClass: anEntityClass). 
 	mapping := anEntityClass xtMapping.
@@ -114,7 +114,8 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	  entityClass: anEntityClass;
 	  mapping: mapping.
 	qb pull: #e attrs: mapping asXtPullPattern. 
-	aPredicateBlock value: eb.
+	where := (aPredicateBlock value: eb) simplify.
+	Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr.
 	^ qb executeOn: self
 ]
 

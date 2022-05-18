@@ -19,10 +19,10 @@ XtWhereEAV >> e: entity a: attr v: val [
 
 { #category : #'as yet unclassified' }
 XtWhereEAV >> inParameters [ 
-  ^ { (self inName: 'v') -> v }
+  ^ { (self inName: 'p') -> v }
 ]
 
 { #category : #rendering }
 XtWhereEAV >> render [	
-  ^ { e . a . self inName: 'v' }
+  ^ { e . a . self inName: 'v' } asOrderedCollection 
 ]

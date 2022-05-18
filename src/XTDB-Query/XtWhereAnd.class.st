@@ -12,5 +12,18 @@ XtWhereAnd >> operation [
 { #category : #rendering }
 XtWhereAnd >> renderToplevel [ 
 	"Render and at toplevel without the operation, just an ordered collection of clauses."
-	^ self children asOrderedCollection 
+	^ self children collect: #render 
+]
+
+{ #category : #'as yet unclassified' }
+XtWhereAnd >> simplify [
+	"Unwrap all nested and clauses."
+	clauses := clauses collectAll: [ :c | c simplify unwrap ].
+	^ self
+	
+]
+
+{ #category : #'as yet unclassified' }
+XtWhereAnd >> unwrap [
+	^ clauses
 ]
