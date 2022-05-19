@@ -17,6 +17,15 @@ XtWhereNode >> & anotherNode [
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+XtWhereNode >> allInParameters [
+	| in |
+	in := Dictionary new.
+	self prewalk: [ :n | n inParameters do: [ :p | in at: p key put: p value ] ].
+	^ in
+	
+]
+
 { #category : #accessing }
 XtWhereNode >> children [
 	"Answer the a collection of child nodes. Default answers with an empty array."

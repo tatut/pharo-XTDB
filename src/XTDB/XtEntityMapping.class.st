@@ -2,6 +2,7 @@ Class {
 	#name : #XtEntityMapping,
 	#superclass : #XtMapping,
 	#instVars : [
+		'entityDiscriminator',
 		'fieldMappings'
 	],
 	#category : #XTDB
@@ -21,6 +22,24 @@ XtEntityMapping >> asXtPullPattern [
 XtEntityMapping >> attributeFor: getter [
 	^ (fieldMappings detect: [ :fm | fm getter = getter ]
 		ifNone: [ Error signal: 'No XTDB attributed mapped for accessor: ', getter ]) attribute
+]
+
+{ #category : #accessing }
+XtEntityMapping >> entityDiscriminator [
+
+	^ entityDiscriminator
+]
+
+{ #category : #accessing }
+XtEntityMapping >> entityDiscriminator: anObject [
+
+	entityDiscriminator := anObject
+]
+
+{ #category : #accessing }
+XtEntityMapping >> fieldMappings [
+
+	^ fieldMappings
 ]
 
 { #category : #accessing }

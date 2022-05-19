@@ -59,6 +59,16 @@ XtQueryBuilder >> result: aResultMapping [
 ]
 
 { #category : #'as yet unclassified' }
+XtQueryBuilder >> setIn: aDictionary [ 
+ in := aDictionary 
+]
+
+{ #category : #'as yet unclassified' }
+XtQueryBuilder >> setWhere: clauses [
+  where := clauses
+]
+
+{ #category : #'as yet unclassified' }
 XtQueryBuilder >> where: clause [
   where add: clause
 ]

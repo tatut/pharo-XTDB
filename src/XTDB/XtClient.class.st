@@ -114,8 +114,14 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	  entityClass: anEntityClass;
 	  mapping: mapping.
 	qb pull: #e attrs: mapping asXtPullPattern. 
-	where := (aPredicateBlock value: eb) simplify.
+  where := aPredicateBlock value: eb.
+  "Add entity discriminator, if present"
+  mapping entityDiscriminator ifNotNil: [ :ed |
+	  where := XtWhereAnd new add: ed asXtWhereClause; add: where; yourself ].
+  where := where simplify.
 	Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr.
+	qb setWhere: where renderToplevel.
+	qb setIn: where allInParameters.
 	^ qb executeOn: self
 ]
 
