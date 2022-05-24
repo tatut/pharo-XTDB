@@ -16,6 +16,22 @@ XtLinkMapping class >> of: anAssociation to: entityClass [
 ]
 
 { #category : #converting }
+XtLinkMapping >> asXtEntityAttrRef: aPredicateBuilder [ 
+  | entity |
+  entity := (entityClass name first asString, aPredicateBuilder nextIndex asString) asSymbol.
+	^ XtEntityPredicateBuilder new
+	  "Add initial node that binds the entity"
+	  initialNode: (XtWhereBindEA new e: aPredicateBuilder entity a: attribute lvar: entity);
+	  queryBuilder: aPredicateBuilder queryBuilder;
+	  entity: entity;
+		entityClass: entityClass;
+		mapping: entityClass xtMapping;
+		yourself 
+		
+		
+]
+
+{ #category : #converting }
 XtLinkMapping >> asXtPullPattern [ 
   "FIXME: we need to control depth some way, if there are circular references it will cause
   infinite expansion of pull pattern.

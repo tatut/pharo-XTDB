@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'entity',
 		'attribute',
-		'predicateBuilder'
+		'predicateBuilder',
+		'initialNode'
 	],
 	#category : #'XTDB-Query'
 }
@@ -22,7 +23,7 @@ XtEntityPredicateAttrRef >> <= otherObject [
 { #category : #comparing }
 XtEntityPredicateAttrRef >> = otherObject [ 
 	"Add EAV pattern"
-	^ self nodeWithId: (XtWhereEAV new e: entity a: attribute v: otherObject; yourself)
+	^ self wrap: (self nodeWithId: (XtWhereEAV new e: entity a: attribute v: otherObject; yourself))
 ]
 
 { #category : #comparing }
@@ -47,6 +48,12 @@ XtEntityPredicateAttrRef >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : #accessing }
+XtEntityPredicateAttrRef >> initialNode: anObject [
+
+	initialNode := anObject
+]
+
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> nodeWithId: aNode [
 	aNode id: predicateBuilder nextIndex asString.
@@ -68,30 +75,37 @@ XtEntityPredicateAttrRef >> startsWith: aPrefixString [
 	lvar := #v,predicateBuilder nextIndex asString.
 	min := aPrefixString.
 	max := aPrefixString allButLast, (aPrefixString last asInteger + 1) asCharacter asString. 
-  ^ XtWhereAnd new 
+  ^ self wrap: (XtWhereAnd new 
 		add: (XtWhereBindEA new e: entity a: attribute lvar: lvar; yourself);
 		add: (self nodeWithId: (XtWherePredicate new predicate: #>= lvar: lvar val: min));
 		add: (self nodeWithId: (XtWherePredicate new predicate: #< lvar: lvar val: max));
-		yourself
+		yourself)
 ]
 
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> textSearch: aLuceneSearchString [
-  ^ self nodeWithId: (XtWhereTextSearch new e: #e a: attribute v: aLuceneSearchString; yourself)
+  ^ self wrap: (self nodeWithId: (XtWhereTextSearch new e: entity a: attribute v: aLuceneSearchString; yourself))
 
 ]
 
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> wherePredicateNode: op [
-	^ self nodeWithId: (XtWherePredicate new operation: op; e: entity )
+	^ self wrap: (self nodeWithId: (XtWherePredicate new operation: op; e: entity ))
 ]
 
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> wherePredicateNode: op value: val [
   | lvar |
   lvar := #v,predicateBuilder nextIndex asString.
-	^ XtWhereAnd new 
+	^ self wrap: (XtWhereAnd new 
 		add: (XtWhereBindEA new e: entity a: attribute lvar: lvar; yourself);
 		add: (self nodeWithId: (XtWherePredicate new predicate: op lvar: lvar val: val));
-		yourself
+		yourself)
+]
+
+{ #category : #'as yet unclassified' }
+XtEntityPredicateAttrRef >> wrap: aNode [
+	"Wrap a node with initial node, if any"
+	initialNode ifNil: [ ^ aNode ].
+	^ XtWhereAnd new add: initialNode; add: aNode; yourself
 ]

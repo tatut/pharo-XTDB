@@ -110,6 +110,7 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	qb result: (XtEntityPullMapping new entityClass: anEntityClass). 
 	mapping := anEntityClass xtMapping.
 	eb := XtEntityPredicateBuilder new 
+	  entity: #e;
 	  queryBuilder: qb;
 	  entityClass: anEntityClass;
 	  mapping: mapping.

@@ -26,12 +26,15 @@ XtFieldMapping class >> of: anAttributeToGetterAssociation [
 ]
 
 { #category : #converting }
-XtFieldMapping >> asXtEntityAttrRef [
+XtFieldMapping >> asXtEntityAttrRef: aPredicateBuilder [
   "Return an entity attribute reference for this field mapping. 
   This is called by selector access in query predicates."
   ^ XtEntityPredicateAttrRef new
-	     entity: #e; 
-	     attribute: attribute; yourself
+		  initialNode: aPredicateBuilder initialNode;
+	     entity: aPredicateBuilder entity; 
+	     attribute: attribute; 
+			predicateBuilder: aPredicateBuilder;
+		yourself
 	
 ]
 

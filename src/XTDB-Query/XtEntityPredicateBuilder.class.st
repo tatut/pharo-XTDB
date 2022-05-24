@@ -10,33 +10,46 @@ Class {
 		'queryBuilder',
 		'entityClass',
 		'mapping',
-		'index'
+		'index',
+		'entity',
+		'initialNode'
 	],
 	#category : #'XTDB-Query'
 }
 
-{ #category : #adding }
-XtEntityPredicateBuilder >> addEquals: entity attr: attr value: value [
-	queryBuilder where: entity attr: attr val: value 
-]
-
-{ #category : #adding }
-XtEntityPredicateBuilder >> addWhere: clause [
-	queryBuilder where: clause
-]
-
 { #category : #'reflective operations' }
 XtEntityPredicateBuilder >> doesNotUnderstand: aMessage [
 	"Proxy getters"
-	^ (mapping mappingFor: aMessage selector) asXtEntityAttrRef
-		predicateBuilder: self;
-		yourself
+	^ (mapping mappingFor: aMessage selector) asXtEntityAttrRef: self
+]
 
+{ #category : #accessing }
+XtEntityPredicateBuilder >> entity [
+
+	^ entity
+]
+
+{ #category : #accessing }
+XtEntityPredicateBuilder >> entity: anObject [
+
+	entity := anObject
 ]
 
 { #category : #accessing }
 XtEntityPredicateBuilder >> entityClass: anObject [
 	entityClass := anObject
+]
+
+{ #category : #accessing }
+XtEntityPredicateBuilder >> initialNode [
+
+	^ initialNode
+]
+
+{ #category : #accessing }
+XtEntityPredicateBuilder >> initialNode: anObject [
+
+	initialNode := anObject
 ]
 
 { #category : #initialization }
@@ -51,10 +64,13 @@ XtEntityPredicateBuilder >> mapping: anObject [
 
 { #category : #accessing }
 XtEntityPredicateBuilder >> nextIndex [
-	| idx |
-	idx := index.
-	index := idx + 1.
-	^ idx
+	^ queryBuilder nextIndex
+]
+
+{ #category : #accessing }
+XtEntityPredicateBuilder >> parent: anObject [
+
+	parent := anObject
 ]
 
 { #category : #accessing }

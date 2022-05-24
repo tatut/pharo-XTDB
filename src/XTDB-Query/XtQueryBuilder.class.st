@@ -9,7 +9,8 @@ Class {
 		'find',
 		'where',
 		'in',
-		'result'
+		'result',
+		'index'
 	],
 	#category : #'XTDB-Query'
 }
@@ -41,10 +42,19 @@ XtQueryBuilder >> in: name value: value [
 
 { #category : #initialization }
 XtQueryBuilder >> initialize [
+  index := 0.
 	find := OrderedCollection new.
 	where := OrderedCollection new.
 	in := Dictionary new. "arguments name -> value"
 	result := XtQueryResult new "default to generic query result"
+]
+
+{ #category : #accessing }
+XtQueryBuilder >> nextIndex [
+	| idx |
+	idx := index.
+	index := idx + 1.
+	^ idx
 ]
 
 { #category : #'as yet unclassified' }
