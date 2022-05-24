@@ -28,12 +28,10 @@ XtEntityPredicateBuilder >> addWhere: clause [
 { #category : #'reflective operations' }
 XtEntityPredicateBuilder >> doesNotUnderstand: aMessage [
 	"Proxy getters"
-	| attr |
-	attr := mapping attributeFor: aMessage selector.
-	^ XtEntityPredicateAttrRef new
-	     predicateBuilder: self;
-	     entity: #e; 
-	     attribute: attr; yourself
+	^ (mapping mappingFor: aMessage selector) asXtEntityAttrRef
+		predicateBuilder: self;
+		yourself
+
 ]
 
 { #category : #accessing }

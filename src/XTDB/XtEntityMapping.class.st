@@ -48,6 +48,12 @@ XtEntityMapping >> fieldMappings: aCollection [
 ]
 
 { #category : #'as yet unclassified' }
+XtEntityMapping >> mappingFor: getter [
+	^ fieldMappings detect: [ :fm | fm getter = getter ]
+		ifNone: [ Error signal: 'No XTDB attributed mapped for accessor: ', getter ]
+]
+
+{ #category : #'as yet unclassified' }
 XtEntityMapping >> xtPopulate: entity from: dictionary [
 	fieldMappings do: [ :mapping |
 		mapping xtPopulate: entity from: dictionary  ]
