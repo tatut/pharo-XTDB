@@ -19,7 +19,7 @@ Person class >> xtMapping [
 	^ XtEntityMapping withAll: {  
     #':last-name' -> #lastName .
     #':first-name' -> #firstName .
-    #':address' -> #address .
+    XtChildMapping of: #':address' -> #address to: Address .
     #':job-title' -> #jobTitle .
     #':gender' -> #gender .
     #':email' -> #email .

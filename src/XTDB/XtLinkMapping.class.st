@@ -62,3 +62,9 @@ XtLinkMapping >> valueToInstance: value [
   entityClass xtMapping xtPopulate: inst from: value.
   ^ inst
 ]
+
+{ #category : #'as yet unclassified' }
+XtLinkMapping >> xtBuild: aDocumentBuilder document: doc from: instance [
+	"Do nothing, we don't store changes to linked entites."
+	
+]

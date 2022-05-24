@@ -87,6 +87,11 @@ XtFieldMapping >> toValue: xtValue [
 ]
 
 { #category : #'as yet unclassified' }
+XtFieldMapping >> xtBuild: aDocumentBuilder document: doc from: instance [
+	doc at: attribute put: (instance perform: getter)
+]
+
+{ #category : #'as yet unclassified' }
 XtFieldMapping >> xtPopulate: instance from: dictionary [
 	dictionary at: attribute 
 	  ifPresent: [ :value | instance perform: setter with: (self toValue: value) ].

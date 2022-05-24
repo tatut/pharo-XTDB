@@ -11,3 +11,16 @@ Class {
 	#superclass : #XtLinkMapping,
 	#category : #XTDB
 }
+
+{ #category : #'as yet unclassified' }
+XtChildMapping >> xtBuild: aDocumentBuilder document: doc from: anEntity [
+	"Build documents for an owned child and link the ids in parent."
+	| ref value |	
+	value := anEntity perform: getter.
+	value ifNil: [ ^ nil ].
+	ref := many 
+	  ifTrue: [ value collect: [ :child | aDocumentBuilder build: child] as: OrderedCollection ] 
+	  ifFalse: [ aDocumentBuilder build: value ].
+	doc at: attribute put: ref.
+	
+]

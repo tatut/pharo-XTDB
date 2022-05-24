@@ -138,6 +138,17 @@ XtClient >> status [
 	^ self getRequest: 'status' with: {} as: XtStatus  
 ]
 
+{ #category : #printing }
+XtClient >> store: anEntity [
+	"Store the given entity instance. Will recursively store any owned child entities.
+	Creates new UUID entity ids for new documents."
+	| builder |
+	builder := XtDocumentBuilder new entity: anEntity.
+	builder build.
+	 
+
+]
+
 { #category : #accessing }
 XtClient >> url: baseURL [
 	"Set the XTDB server base URL"
