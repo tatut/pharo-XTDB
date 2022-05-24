@@ -8,7 +8,7 @@ Class {
 BaselineOfXTDB >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ spec
-		package: 'EDN' with: [ spec repository: 'github://tatut/pharo-EDN' ];
+		package: 'EDN' with: [ spec repository: 'github://tatut/pharo-EDN:main' ];
 		package: 'XTDB' with: [ spec requires: 'EDN' ];
 		package: 'XTDB-Query' with: [ spec requires: 'XTDB' ];
 		package: 'XTDB-Examples' with: [ spec requires: 'XTDB-Query' ];
