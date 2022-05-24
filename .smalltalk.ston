@@ -3,7 +3,8 @@ SmalltalkCISpec {
     SCIMetacelloLoadSpec {
       #baseline : 'XTDB',
       #directory: 'src',
-      #platforms : [ #pharo ]
+      #platforms : [ #pharo ],
+      #repository: 'github://tatut/pharo-XTDB:main'
     }
   ]
 }
