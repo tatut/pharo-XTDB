@@ -4,7 +4,7 @@ SmalltalkCISpec {
       #baseline : 'XTDB',
       #directory: 'src',
       #platforms : [ #pharo ],
-      #repository: 'github://tatut/pharo-XTDB:main'
+      #load: 'ci'
     }
   ]
 }
