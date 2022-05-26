@@ -1,8 +1,18 @@
 Class {
 	#name : #PersonTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'xt'
+	],
 	#category : #'XTDB-Examples-Tests'
 }
+
+{ #category : #running }
+PersonTest >> setUp [
+	super setUp.
+	
+	
+]
 
 { #category : #tests }
 PersonTest >> testBuildPersonDocument [
