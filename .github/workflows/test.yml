@@ -10,7 +10,7 @@ jobs:
         id: smalltalkci
         with:
           smalltalk-image: 'Pharo64-stable'
-      - uses: BerniWittmann/background-server-action@latest
+      - uses: BerniWittmann/background-server-action@v1.0.4
         with:
           command: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
           start: ./test/xtdb.sh
