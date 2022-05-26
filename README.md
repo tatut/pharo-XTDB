@@ -75,6 +75,13 @@ and #textSearch: to do a Lucene query (requires that XTDB has
 Lucene indexing module enabled).
 "
 xt q: Person matching: [ :p |
-  (p firstName = 'Max') & (p address streetAddress textSearch: 'small*') ].
+  (p firstName = 'Max') | (p address streetAddress textSearch: 'small*') ].
 "returns an OrderedCollection containing Person instances"
+
+
+"Delete (history is still retained) by calling delete. It will delete all the owned
+children of the entity recursively.
+"
+p := (xt q: Person matching: [ :p | p firstName = 'Max' ]) results first.
+xt delete: p.
 ```
