@@ -19,7 +19,7 @@ Object subclass: #Person
 
 "accessor methods omitted"
 
-xtMapping
+Person class >> xtMapping
   ^ XtEntityMapping withAll: {
     "the document id in XTDB"
     #':xt/id' -> #_xtId .
