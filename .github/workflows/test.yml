@@ -6,6 +6,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: DeLaGuardo/setup-clojure@5.1
+        with:
+          cli: 1.11.1.1113
       - uses: hpi-swa/setup-smalltalkCI@v1
         id: smalltalkci
         with:
