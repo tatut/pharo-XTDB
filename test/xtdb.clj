@@ -4,6 +4,6 @@
                 :xtdb.http-server/server {:port 6666}})
 (println "Started XTDB")
 
-(read)
+(Thread/sleep (* 1000 60 5)) ; sleep for five minutes
 
 (System/exit 0)
