@@ -1,0 +1,3 @@
+{:deps {com.xtdb/xtdb-core {:mvn/version "1.21.0"}
+        com.xtdb/xtdb-http-server {:mvn/version "1.21.0"}
+        com.xtdb/xtdb-lucene {:mvn/version "1.21.0"}}}

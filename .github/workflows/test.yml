@@ -5,10 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: DeLaGuardo/setup-clojure@5.1
       - uses: hpi-swa/setup-smalltalkCI@v1
         id: smalltalkci
         with:
           smalltalk-image: 'Pharo64-stable'
-      - run: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
+      - uses: BerniWittmann/background-server-action@latest
+        with:
+          command: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
+          start: ./test/xtdb.sh
         shell: bash
         timeout-minutes: 15
