@@ -21,7 +21,7 @@ IntegrationTest >> setUp [
 { #category : #tests }
 IntegrationTest >> testAddPerson [
   | results |
-	xt store: (Person new
+	xt storeAndWait: (Person new
 	  _xtId: 'max';
 	  firstName: 'Max'; 
 	  lastName: 'Feedpressure'; 
@@ -32,7 +32,6 @@ IntegrationTest >> testAddPerson [
 					  country: #':FI';
 					  yourself);
 	yourself).
-	
 	
 	results := (xt q: Person matching: [ :p | p firstName = 'Max' ]) results.
 	
@@ -54,19 +53,19 @@ IntegrationTest >> testStatus [
 
 { #category : #tests }
 IntegrationTest >> testTextSearch [
-  | results |
+  | results tx |
    #( ('Jack' 'Javaman' 'Java developer') 
       ('Carla' 'Clojurian' 'Clojure developer')
       ('Sally' 'Smalltalker' 'Smalltalk developer')
       ('Harry' 'Haskeller' 'Haskell developer') ) do: [ :row |
-		xt store: (Person new
+		tx := xt store: (Person new
 		 _xtId: (row at: 1);
 	   firstName: (row at: 1); 
 	   lastName: (row at: 2); 
 	   jobTitle: (row at: 3);
       yourself)
   ].
-	(Delay forSeconds: 1) wait. "FIXME: should wait for specific tx instead of sleeping"
+  xt awaitTx: tx txId.
 	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'dev*' ]) results.
 	self assert: results size equals: 4.
   	

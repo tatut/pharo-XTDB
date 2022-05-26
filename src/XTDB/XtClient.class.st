@@ -14,6 +14,11 @@ Class {
 	#category : #XTDB
 }
 
+{ #category : #'as yet unclassified' }
+XtClient >> awaitTx: txId [
+	^ self getRequest: 'await-tx' with: { 'tx-id' -> txId asString } as: XtTxInfo. 
+]
+
 { #category : #accessing }
 XtClient >> entity: id [
 	"Fetch an entity by id. Answer with an XtEntity instance."
@@ -157,6 +162,12 @@ XtClient >> store: anEntity [
 		post.
 	^ self parseResponse: response as: XtTxInfo 
 
+]
+
+{ #category : #printing }
+XtClient >> storeAndWait: anEntity [
+	"Store and wait for the tx to be indexed."
+	^ self awaitTx: (self store: anEntity) txId
 ]
 
 { #category : #accessing }
