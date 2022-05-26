@@ -14,5 +14,4 @@ jobs:
         with:
           command: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
           start: ./test/xtdb.sh
-        shell: bash
         timeout-minutes: 15
