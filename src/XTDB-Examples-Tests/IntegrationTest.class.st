@@ -11,11 +11,40 @@ Class {
 	#category : #'XTDB-Examples-Tests'
 }
 
+{ #category : #'as yet unclassified' }
+IntegrationTest >> q: block [ 
+ ^ (xt q: Person matching: block) results
+]
+
 { #category : #running }
 IntegrationTest >> setUp [
 	super setUp.
 	xt := XtClient new url: 'http://localhost:6666/_xtdb/'
 
+]
+
+{ #category : #'as yet unclassified' }
+IntegrationTest >> storeTestPersons [
+  | tx |
+  #( ('Jack' 'Javaman' 'Java developer' 'Spring road 1' '12345') 
+     ('Carla' 'Clojurian' 'Clojure developer' 'Ring avenue 2' '23456')
+     ('Sally' 'Smalltalker' 'Smalltalk developer' 'Seaside street 3' '34567')
+     ('Harry' 'Haskeller' 'Haskell developer' 'Applicative way 4' '45678')
+     ('Diana' 'Devopser' 'DevOps specialist' 'Automation drive 5' '56789')
+     ('Andy' 'Advocate' 'Developer advocate' 'Meetup blvd 6' '67890')) 
+   do: [ :row |
+		tx := xt store: (Person new
+		 _xtId: (row at: 1);
+	   firstName: (row at: 1); 
+	   lastName: (row at: 2); 
+	   jobTitle: (row at: 3);
+	   address: (Address new 
+	      streetAddress: (row at: 4);
+	      postalCode: (row at: 5);
+	      yourself);
+      yourself)
+  ].
+  xt awaitTx: tx txId.
 ]
 
 { #category : #tests }
@@ -69,6 +98,17 @@ IntegrationTest >> testAddPersonDelete [
 ]
 
 { #category : #tests }
+IntegrationTest >> testQueryByChild [ 
+  | results |
+  self storeTestPersons .
+  results := self q: [ :p | p address postalCode > '40000' ].
+  self assert: results size equals: 3. "harry, diana, andy"
+
+  results := self q: [ :p | (p address streetAddress textSearch: 'avenue') | (p firstName = 'Jack') ].
+  self assert: results size equals: 2. "jack and carla"
+]
+
+{ #category : #tests }
 IntegrationTest >> testStatus [
   | s |
 	s := xt status.
@@ -77,28 +117,16 @@ IntegrationTest >> testStatus [
 
 { #category : #tests }
 IntegrationTest >> testTextSearch [
-  | results tx |
-   #( ('Jack' 'Javaman' 'Java developer') 
-      ('Carla' 'Clojurian' 'Clojure developer')
-      ('Sally' 'Smalltalker' 'Smalltalk developer')
-      ('Harry' 'Haskeller' 'Haskell developer')
-      ('Diana' 'Devopser' 'DevOps specialist')
-      ('Andy' 'Advocate' 'Developer advocate') ) do: [ :row |
-		tx := xt store: (Person new
-		 _xtId: (row at: 1);
-	   firstName: (row at: 1); 
-	   lastName: (row at: 2); 
-	   jobTitle: (row at: 3);
-      yourself)
-  ].
-  xt awaitTx: tx txId.
-	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'dev*' ]) results.
+  | results |
+  self storeTestPersons.
+
+	results := self q: [ :p | p jobTitle textSearch: 'dev*' ].
 	self assert: results size equals: 6.
 	
-	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'developer' ]) results.
+	results := self q: [ :p | p jobTitle textSearch: 'developer' ].
 	self assert: results size equals: 5.
 	
-	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'small*' ]) results.
+	results := self q: [ :p | p jobTitle textSearch: 'small*' ].
 	self assert: results size equals: 1.
 	
   	
