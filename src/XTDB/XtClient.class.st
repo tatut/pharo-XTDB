@@ -52,9 +52,8 @@ XtClient >> getRequest: path with: queryParameters as: aResultClass [
 
 { #category : #accessing }
 XtClient >> getZnClient [
-	"Get (creating it if necessary) the ZnClient instance."
-	znClient ifNil: [ znClient := ZnClient new ].
-	^ znClient
+	"Get the ZnClient instance."
+	 ^ ZnClient new 
 ]
 
 { #category : #'as yet unclassified' }
@@ -143,10 +142,20 @@ XtClient >> status [
 XtClient >> store: anEntity [
 	"Store the given entity instance. Will recursively store any owned child entities.
 	Creates new UUID entity ids for new documents."
-	| builder |
-	builder := XtDocumentBuilder new entity: anEntity.
-	builder build.
-	 
+	| builder payload response |
+	builder := XtDocumentBuilder new.
+	builder build: anEntity.
+	payload := String streamContents: [ :out |
+		EDNWriter new out: out; 
+		 write: (Dictionary new
+		          at: #':tx-ops' put: (builder documents collect: [ :d | 
+		OrderedCollection with: #':xtdb.api/put' with: d ] as: OrderedCollection); yourself) ].
+	response := self getZnClient
+		accept: 'application/edn';
+		url: url,'submit-tx';
+		entity: (EDNEntity with: payload);
+		post.
+	^ self parseResponse: response as: Dictionary
 
 ]
 
