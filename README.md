@@ -19,7 +19,7 @@ Object subclass: #Person
 
 "accessor methods omitted"
 
-Person class >> xtMapping
+Person class >> xtMapping [
   ^ XtEntityMapping withAll: {
     "the document id in XTDB"
     #':xt/id' -> #_xtId .
@@ -39,6 +39,7 @@ Person class >> xtMapping
     XtLinkMapping of: #':company' -> #company to: Company .
 
   }
+]
 ```
 
 After adding the mapping, you can create a client and store instances:
