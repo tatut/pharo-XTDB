@@ -45,6 +45,30 @@ IntegrationTest >> testAddPerson [
 ]
 
 { #category : #tests }
+IntegrationTest >> testAddPersonDelete [
+  | results |
+	xt storeAndWait: (Person new
+	  _xtId: 'deleteme';
+	  firstName: 'Del'; 
+	  lastName: 'Eteme'; 
+	  address: (Address new 
+			  	      streetAddress: 'Delete 1';
+					  postalCode: '12345';
+					  city: 'Kello';
+					  country: #':FI';
+					  yourself);
+	yourself).
+	
+	results := (xt q: Person matching: [ :p | p firstName = 'Del' ]) results.	
+	self assert: results size equals: 1.
+	
+	xt deleteAndWait: results first.
+	results := (xt q: Person matching: [ :p | p firstName = 'Del' ]) results.
+	self assert: results size equals: 0.
+	
+]
+
+{ #category : #tests }
 IntegrationTest >> testStatus [
   | s |
 	s := xt status.
@@ -57,7 +81,9 @@ IntegrationTest >> testTextSearch [
    #( ('Jack' 'Javaman' 'Java developer') 
       ('Carla' 'Clojurian' 'Clojure developer')
       ('Sally' 'Smalltalker' 'Smalltalk developer')
-      ('Harry' 'Haskeller' 'Haskell developer') ) do: [ :row |
+      ('Harry' 'Haskeller' 'Haskell developer')
+      ('Diana' 'Devopser' 'DevOps specialist')
+      ('Andy' 'Advocate' 'Developer advocate') ) do: [ :row |
 		tx := xt store: (Person new
 		 _xtId: (row at: 1);
 	   firstName: (row at: 1); 
@@ -67,7 +93,14 @@ IntegrationTest >> testTextSearch [
   ].
   xt awaitTx: tx txId.
 	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'dev*' ]) results.
-	self assert: results size equals: 4.
+	self assert: results size equals: 6.
+	
+	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'developer' ]) results.
+	self assert: results size equals: 5.
+	
+	results := (xt q: Person matching: [ :p | p jobTitle textSearch: 'small*' ]) results.
+	self assert: results size equals: 1.
+	
   	
 	
 	

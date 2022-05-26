@@ -19,6 +19,24 @@ XtClient >> awaitTx: txId [
 	^ self getRequest: 'await-tx' with: { 'tx-id' -> txId asString } as: XtTxInfo. 
 ]
 
+{ #category : #printing }
+XtClient >> delete: anEntity [
+	"Delete the entity (and all owned child items recursively)."
+	| builder |
+	builder := XtDeletionBuilder new.
+	builder build: anEntity.
+	^ self submitTx: 
+		(builder ids collect: [ :d | 
+			OrderedCollection with: #':xtdb.api/delete' with: d ] as: OrderedCollection).
+		
+]
+
+{ #category : #printing }
+XtClient >> deleteAndWait: anEntity [
+	"Delete the entity (and all owned child items recursively)."
+	^ self awaitTx: (self delete: anEntity) txId 
+]
+
 { #category : #accessing }
 XtClient >> entity: id [
 	"Fetch an entity by id. Answer with an XtEntity instance."
@@ -147,20 +165,12 @@ XtClient >> status [
 XtClient >> store: anEntity [
 	"Store the given entity instance. Will recursively store any owned child entities.
 	Creates new UUID entity ids for new documents."
-	| builder payload response |
+	| builder |
 	builder := XtDocumentBuilder new.
 	builder build: anEntity.
-	payload := String streamContents: [ :out |
-		EDNWriter new out: out; 
-		 write: (Dictionary new
-		          at: #':tx-ops' put: (builder documents collect: [ :d | 
-		OrderedCollection with: #':xtdb.api/put' with: d ] as: OrderedCollection); yourself) ].
-	response := self getZnClient
-		accept: 'application/edn';
-		url: url,'submit-tx';
-		entity: (EDNEntity with: payload);
-		post.
-	^ self parseResponse: response as: XtTxInfo 
+	^ self submitTx: 
+		(builder documents collect: [ :d | 
+		  OrderedCollection with: #':xtdb.api/put' with: d ] as: OrderedCollection)
 
 ]
 
@@ -168,6 +178,23 @@ XtClient >> store: anEntity [
 XtClient >> storeAndWait: anEntity [
 	"Store and wait for the tx to be indexed."
 	^ self awaitTx: (self store: anEntity) txId
+]
+
+{ #category : #printing }
+XtClient >> submitTx: txOps [
+	"Delete the entity (and all owned child items recursively)."
+	| payload response |
+	payload := String streamContents: [ :out |
+		EDNWriter new out: out; 
+		 write: (Dictionary new at: #':tx-ops' put: txOps; yourself) ].
+	Transcript show: 'TX: ', payload; cr.
+	response := self getZnClient
+		accept: 'application/edn';
+		url: url,'submit-tx';
+		entity: (EDNEntity with: payload);
+		post.
+	^ self parseResponse: response as: XtTxInfo 
+
 ]
 
 { #category : #accessing }
