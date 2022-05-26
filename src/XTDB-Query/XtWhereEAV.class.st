@@ -24,5 +24,5 @@ XtWhereEAV >> inParameters [
 
 { #category : #rendering }
 XtWhereEAV >> render [	
-  ^ { e . a . self inName: 'v' } asOrderedCollection 
+  ^ { e . a . self inName: 'p' } asOrderedCollection 
 ]

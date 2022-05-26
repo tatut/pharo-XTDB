@@ -155,7 +155,7 @@ XtClient >> store: anEntity [
 		url: url,'submit-tx';
 		entity: (EDNEntity with: payload);
 		post.
-	^ self parseResponse: response as: Dictionary
+	^ self parseResponse: response as: XtTxInfo 
 
 ]
 

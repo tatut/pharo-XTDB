@@ -15,15 +15,16 @@ Class {
 
 { #category : #accessing }
 XtStatus class >> xtMapping [ 
-  ^ XtMapping new 
-  map: #':xtdb.version/version' -> #version:;
-  map: #':xtdb.version/revision' -> #revision:;
-  map: #':xtdb.kv/kv-store' -> #kvStore:;
-  map: #':xtdb.kv/estimate-num-keys' -> #estimateNumKeys:;
-  map: #':xtdb.kv/size' -> #size:;
-  map: #':xtdb.index/index-version' -> #indexVersion:;
-  map: #':xtdb.tx-log/consumer-state' -> #consumerState:;
-	yourself 
+  ^ XtEntityMapping withAll: { 
+  #':xtdb.version/version' -> #version .
+  #':xtdb.version/revision' -> #revision .
+  #':xtdb.kv/kv-store' -> #kvStore .
+  #':xtdb.kv/estimate-num-keys' -> #estimateNumKeys .
+  #':xtdb.kv/size' -> #size .
+  #':xtdb.index/index-version' -> #indexVersion .
+  #':xtdb.tx-log/consumer-state' -> #consumerState 
+}
+
 
 ]
 

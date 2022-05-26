@@ -33,7 +33,9 @@ IntegrationTest >> testAddPerson [
 					  yourself);
 	yourself).
 	
+	
 	results := (xt q: Person matching: [ :p | p firstName = 'Max' ]) results.
+	
 	self assert: results size equals: 1.
 	self assert: results first _xtId equals: 'max'.
 	self assert: results first lastName equals: 'Feedpressure'.
@@ -41,6 +43,13 @@ IntegrationTest >> testAddPerson [
 	
 	
 	
+]
+
+{ #category : #tests }
+IntegrationTest >> testStatus [
+  | s |
+	s := xt status.
+	self assert: s version equals: '1.21.0' 
 ]
 
 { #category : #tests }
