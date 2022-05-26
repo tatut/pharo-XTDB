@@ -142,7 +142,7 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
   mapping entityDiscriminator ifNotNil: [ :ed |
 	  where := XtWhereAnd new add: ed asXtWhereClause; add: where; yourself ].
   where := where simplify.
-	Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr.
+	"Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr."
 	qb setWhere: where renderToplevel.
 	qb setIn: where allInParameters.
 	^ qb executeOn: self
@@ -187,7 +187,7 @@ XtClient >> submitTx: txOps [
 	payload := String streamContents: [ :out |
 		EDNWriter new out: out; 
 		 write: (Dictionary new at: #':tx-ops' put: txOps; yourself) ].
-	Transcript show: 'TX: ', payload; cr.
+	"Transcript show: 'TX: ', payload; cr."
 	response := self getZnClient
 		accept: 'application/edn';
 		url: url,'submit-tx';

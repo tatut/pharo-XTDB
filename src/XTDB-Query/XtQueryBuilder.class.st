@@ -28,7 +28,7 @@ XtQueryBuilder >> executeOn: anXtClient [
 	queryEdn := (EDNWriter toEDNString: q).
 	queryArgs := OrderedCollection with: 'query-edn' -> queryEdn.
 	in ifNotEmpty: [ queryArgs add: 'in-args-edn' -> (EDNWriter toEDNString: (inArgs collect: #value) asOrderedCollection) ].
-	Transcript show: queryArgs printString;cr.
+	"Transcript show: queryArgs printString;cr."
 	res := anXtClient getRequest: 'query' with: queryArgs as: result.
 	res queryEdn: queryEdn args: in.
 	^ res
