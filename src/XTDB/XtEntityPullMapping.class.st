@@ -27,14 +27,11 @@ XtEntityPullMapping >> xtMapping [
 
 { #category : #'as yet unclassified' }
 XtEntityPullMapping >> xtPopulate: xtQueryResult from: resultList [  
-  | results |
-  results := OrderedCollection new.
   resultList do: [ :result |
 	  | obj pull |
 	  pull := result first.
 	  obj := entityClass new.
 	  entityMapping xtPopulate: obj from: pull.
-	  results add: obj
-	].
-  xtQueryResult results: results
+	  xtQueryResult add: obj
+	]
 ]

@@ -9,10 +9,20 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'url',
-		'znClient'
+		'znClient',
+		'txId'
 	],
 	#category : #XTDB
 }
+
+{ #category : #accessing }
+XtClient >> atTxId: aTxId [ 
+	"Return new version of client with txId set."
+	| newClient |
+	newClient := self copy.
+	newClient txId: aTxId.
+	^ newClient
+]
 
 { #category : #'as yet unclassified' }
 XtClient >> awaitTx: txId [
@@ -143,6 +153,7 @@ XtClient >> q: anEntityClass matching: aPredicateBlock [
 	  where := XtWhereAnd new add: ed asXtWhereClause; add: where; yourself ].
   where := where simplify.
 	"Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr."
+	qb txId: txId.
 	qb setWhere: where renderToplevel.
 	qb setIn: where allInParameters.
 	^ qb executeOn: self
@@ -195,6 +206,11 @@ XtClient >> submitTx: txOps [
 		post.
 	^ self parseResponse: response as: XtTxInfo 
 
+]
+
+{ #category : #accessing }
+XtClient >> txId: aTxId [
+	txId := aTxId.
 ]
 
 { #category : #accessing }

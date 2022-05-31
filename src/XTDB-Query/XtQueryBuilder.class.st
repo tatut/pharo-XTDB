@@ -10,7 +10,8 @@ Class {
 		'where',
 		'in',
 		'result',
-		'index'
+		'index',
+		'txId'
 	],
 	#category : #'XTDB-Query'
 }
@@ -28,6 +29,7 @@ XtQueryBuilder >> executeOn: anXtClient [
 	queryEdn := (EDNWriter toEDNString: q).
 	queryArgs := OrderedCollection with: 'query-edn' -> queryEdn.
 	in ifNotEmpty: [ queryArgs add: 'in-args-edn' -> (EDNWriter toEDNString: (inArgs collect: #value) asOrderedCollection) ].
+	txId ifNotNil: [ queryArgs add: 'tx-id' -> txId asString ].
 	"Transcript show: queryArgs printString;cr."
 	res := anXtClient getRequest: 'query' with: queryArgs as: result.
 	res queryEdn: queryEdn args: in.
@@ -76,6 +78,11 @@ XtQueryBuilder >> setIn: aDictionary [
 { #category : #'as yet unclassified' }
 XtQueryBuilder >> setWhere: clauses [
   where := clauses
+]
+
+{ #category : #accessing }
+XtQueryBuilder >> txId: aTxId [ 
+  txId := aTxId
 ]
 
 { #category : #'as yet unclassified' }
