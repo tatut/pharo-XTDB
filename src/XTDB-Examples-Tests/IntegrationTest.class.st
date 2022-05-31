@@ -121,12 +121,12 @@ IntegrationTest >> testHistory [
 	tx2 := xt storeAndWait: person.
 	
 	"After saving, it isn't found with old name, but is found with new name"
-	self assert: (xt q: Person matching: [ :p | p firstName = 'Cha' ]) size equals: 0.
-	self assert: (xt q: Person matching: [ :p | p firstName = 'Other' ]) size equals: 1.
+	self assert: (xt q: Person by: #firstName value: 'Cha') size equals: 0.
+	self assert: (xt q: Person by: #firstName value: 'Other') size equals: 1.
 
    "Going back to history, the old name is still found and new name is not"
-   self assert: ((xt atTxId: tx1 txId) q: Person matching: [ :p | p firstName = 'Cha' ]) size equals: 1.
-   self assert: ((xt atTxId: tx1 txId) q: Person matching: [ :p | p firstName = 'Other' ]) size equals: 0.
+   self assert: ((xt atTxId: tx1 txId) q: Person by: #firstName value: 'Cha') size equals: 1.
+   self assert: ((xt atTxId: tx1 txId) q: Person by: #firstName value: 'Other') size equals: 0.
 
 ]
 

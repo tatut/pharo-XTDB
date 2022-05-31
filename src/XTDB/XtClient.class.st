@@ -135,6 +135,12 @@ XtClient >> q: aBlock [
 ]
 
 { #category : #'as yet unclassified' }
+XtClient >> q: anEntityClass by: fieldAccessor value: value [
+	"Query instances of an entity class that match a predicate."
+	^ self q: anEntityClass matching: [ :e | (e perform: fieldAccessor) = value ]
+]
+
+{ #category : #'as yet unclassified' }
 XtClient >> q: anEntityClass matching: aPredicateBlock [
 	"Query instances of an entity class that match a predicate."
 	| qb eb mapping where |
