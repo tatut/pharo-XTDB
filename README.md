@@ -83,6 +83,6 @@ xt q: Person matching: [ :p |
 "Delete (history is still retained) by calling delete. It will delete all the owned
 children of the entity recursively.
 "
-p := (xt q: Person matching: [ :p | p firstName = 'Max' ]) results first.
+p := (xt q: Person where: [ :p | p firstName = 'Max' ]) results first.
 xt delete: p.
 ```
