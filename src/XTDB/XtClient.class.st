@@ -71,12 +71,12 @@ XtClient >> entity: id as: aClass [
 XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	"Issue GET request to XTDB with given parameters"
 	| requestUrl response |
-	requestUrl := String streamContents: [:out |
-		out << url; << path.
-		queryParameters doWithIndex: [ :param :i |
-		    i = 1 ifTrue: [ out << '?' ] ifFalse: [ out << '&' ].
-			out << param key; << '='; << param value.
-	    ]].
+	requestUrl := url asZnUrl.
+	requestUrl addPathSegment: path.
+	queryParameters do: [ :param |
+		requestUrl queryAt: (param key) add: (param value)
+	].
+  Transcript show: 'URL: ', requestUrl printString; cr.
 	response := self getZnClient 
 	  accept: 'application/edn';
 	  get: requestUrl.
@@ -101,7 +101,7 @@ XtClient >> instancesOf: anEntityClass [
 { #category : #parsing }
 XtClient >> parseResponse: response as: aClass [
 	| edn obj |
-	edn := EDNReader new in: response asString readStream; read.
+	edn := XtEDNReader new in: response asString readStream; read.
 	obj := aClass new.
 	aClass xtMapping xtPopulate: obj from: edn. 
   ^ obj
