@@ -73,10 +73,8 @@ XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	requestUrl := url asZnUrl.
 	requestUrl addPathSegment: path.
 	queryParameters do: [ :param |
-		Transcript show: (param key),' = ', (param value); cr.
 		requestUrl queryAt: (param key) add: (param value)
 	].
-  Transcript show: 'URL: ', requestUrl printString; cr.
 	response := self getZnClient 
 	  accept: 'application/edn';
 	  get: requestUrl.
