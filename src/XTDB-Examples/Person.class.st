@@ -9,7 +9,8 @@ Class {
 		'gender',
 		'email',
 		'_xtId',
-		'company'
+		'company',
+		'dateOfBirth'
 	],
 	#category : #'XTDB-Examples'
 }
@@ -24,7 +25,8 @@ Person class >> xtMapping [
     #':gender' -> #gender .
     #':email' -> #email .
     XtLinkMapping of: #':company' -> #company to: Company .
-    #':xt/id' -> #_xtId 
+    #':xt/id' -> #_xtId .
+    #':date-of-birth' -> #dateOfBirth 
   }
 ]
 
@@ -67,6 +69,18 @@ Person >> company [
 Person >> company: anObject [
 
 	company := anObject
+]
+
+{ #category : #accessing }
+Person >> dateOfBirth [
+
+	^ dateOfBirth
+]
+
+{ #category : #accessing }
+Person >> dateOfBirth: anObject [
+
+	dateOfBirth := anObject
 ]
 
 { #category : #printing }
