@@ -9,7 +9,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'url',
-		'znClient',
 		'txId'
 	],
 	#category : #XTDB
@@ -25,8 +24,8 @@ XtClient >> atTxId: aTxId [
 ]
 
 { #category : #'as yet unclassified' }
-XtClient >> awaitTx: txId [
-	^ self getRequest: 'await-tx' with: { 'tx-id' -> txId asString } as: XtTxInfo. 
+XtClient >> awaitTx: aTxId [
+	^ self getRequest: 'await-tx' with: { 'tx-id' -> aTxId asString } as: XtTxInfo. 
 ]
 
 { #category : #printing }
@@ -76,7 +75,7 @@ XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	queryParameters do: [ :param |
 		requestUrl queryAt: (param key) add: (param value)
 	].
-  Transcript show: 'URL: ', requestUrl printString; cr.
+  "Transcript show: 'URL: ', requestUrl printString; cr."
 	response := self getZnClient 
 	  accept: 'application/edn';
 	  get: requestUrl.
