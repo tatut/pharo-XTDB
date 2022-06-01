@@ -13,7 +13,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 IntegrationTest >> q: block [ 
- ^ (xt q: Person matching: block)
+ ^ (xt q: Person where: block)
 ]
 
 { #category : #running }
@@ -85,7 +85,7 @@ IntegrationTest >> testAddPerson [
 					  yourself);
 	yourself).
 	
-	results := (xt q: Person matching: [ :p | p firstName = 'Max' ]).
+	results := (xt q: Person where: [ :p | p firstName = 'Max' ]).
 	
 	self assert: results size equals: 1.
 	self assert: results first _xtId equals: 'max'.
@@ -111,11 +111,11 @@ IntegrationTest >> testAddPersonDelete [
 					  yourself);
 	yourself).
 	
-	results := (xt q: Person matching: [ :p | p firstName = 'Del' ]).	
+	results := (xt q: Person where: [ :p | p firstName = 'Del' ]).	
 	self assert: results size equals: 1.
 	
 	xt deleteAndWait: results first.
-	results := (xt q: Person matching: [ :p | p firstName = 'Del' ]).
+	results := (xt q: Person where: [ :p | p firstName = 'Del' ]).
 	self assert: results size equals: 0.
 	
 ]
@@ -147,7 +147,7 @@ IntegrationTest >> testHistory [
 					  yourself);
 	yourself).
 	
-	results := (xt q: Person matching: [ :p | p firstName = 'Cha' ]).	
+	results := (xt q: Person where: [ :p | p firstName = 'Cha' ]).	
 	self assert: results size equals: 1.
 	
 	person := results first.
@@ -212,11 +212,11 @@ IntegrationTest >> testTime [
   self assert: results first name equals: 'Learn XTDB'.
 
   "Morning sessions (before 10) "
-  results := xt q: Training matching: [ :t | t startTime < '10' asTime ].
+  results := xt q: Training where: [ :t | t startTime < '10' asTime ].
   self assert: results size equals: 2.
 
   "Very early sessions"
-  results := xt q: Training matching: [ :t | t startTime < '7' asTime ].
+  results := xt q: Training where: [ :t | t startTime < '7' asTime ].
   self assert: results size equals: 1.
   self assert: results first name equals: 'How to wake up early'
 
