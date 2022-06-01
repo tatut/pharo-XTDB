@@ -17,7 +17,7 @@ Class {
 
 { #category : #accessing }
 Person class >> xtMapping [
-	^ XtEntityMapping withAll: {  
+	^ (XtEntityMapping withAll: {  
     #':last-name' -> #lastName .
     #':first-name' -> #firstName .
     XtChildMapping of: #':address' -> #address to: Address .
@@ -26,8 +26,10 @@ Person class >> xtMapping [
     #':email' -> #email .
     XtLinkMapping of: #':company' -> #company to: Company .
     #':xt/id' -> #_xtId .
-    #':date-of-birth' -> #dateOfBirth 
-  }
+    #':date-of-birth' -> #dateOfBirth })
+	entityDiscriminator: (XtEntityDiscriminator attributePresent: #':first-name');
+	yourself
+	
 ]
 
 { #category : #accessing }
