@@ -7,7 +7,8 @@ Class {
 		'description',
 		'date',
 		'startTime',
-		'endTime'
+		'endTime',
+		'comments'
 	],
 	#category : #'XTDB-Examples'
 }
@@ -20,7 +21,8 @@ Training class >> xtMapping [
 	#':training/description' -> #description.
 	#':training/date' -> #date.
 	#':training/start-time' -> #startTime.
-	#':training/end-time' -> #endTime
+	#':training/end-time' -> #endTime.
+	XtReverseLinkMapping field: #comments to: Comment linkField: #entity
  }
 	
 ]
@@ -35,6 +37,18 @@ Training >> _xtId [
 Training >> _xtId: anObject [
 
 	_xtId := anObject
+]
+
+{ #category : #accessing }
+Training >> comments [
+
+	^ comments
+]
+
+{ #category : #accessing }
+Training >> comments: anObject [
+
+	comments := anObject
 ]
 
 { #category : #accessing }

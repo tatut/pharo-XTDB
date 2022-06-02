@@ -177,6 +177,32 @@ IntegrationTest >> testQueryByChild [
 ]
 
 { #category : #tests }
+IntegrationTest >> testReverseLink [ 
+  | res tr |
+	self storeTestTrainings.
+	self storeTestPersons.
+	xt store: (Comment new
+		author: 'Jack';
+		comment: 'Highly recommended for everyone';
+		timestamp: (DateAndTime fromString: '2022-06-01T19:41:00');
+		entity: 'training1'	).
+	xt storeAndWait: (Comment new
+	  author: 'Carla';
+	  comment: 'Best training ever!';
+	  timestamp: (DateAndTime fromString: '2022-06-02T08:23:55');
+	  entity: 'training1').
+	
+	"Pull training and check comments are loaded"
+	res := xt q: Training where: [ :t | t name = 'Learn XTDB' ].
+	self assert: res first comments size equals: 2.
+	
+	tr := (res first comments detect: [ :c | c comment = 'Best training ever!' ]).
+	tr inspect.
+	self assert: tr isNotNil.
+	self assert: tr timestamp asDate yyyymmdd equals: '2022-06-02'
+]
+
+{ #category : #tests }
 IntegrationTest >> testStatus [
   | s |
 	s := xt status.
