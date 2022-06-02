@@ -197,7 +197,6 @@ IntegrationTest >> testReverseLink [
 	self assert: res first comments size equals: 2.
 	
 	tr := (res first comments detect: [ :c | c comment = 'Best training ever!' ]).
-	tr inspect.
 	self assert: tr isNotNil.
 	self assert: tr timestamp asDate yyyymmdd equals: '2022-06-02'
 ]
