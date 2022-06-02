@@ -182,12 +182,12 @@ IntegrationTest >> testReverseLink [
 	self storeTestTrainings.
 	self storeTestPersons.
 	xt store: (Comment new
-		author: 'Jack';
+		author: (Person new _xtId: 'Jack');
 		comment: 'Highly recommended for everyone';
 		timestamp: (DateAndTime fromString: '2022-06-01T19:41:00');
 		entity: 'training1'	).
 	xt storeAndWait: (Comment new
-	  author: 'Carla';
+	  author: (Person new _xtId: 'Carla');
 	  comment: 'Best training ever!';
 	  timestamp: (DateAndTime fromString: '2022-06-02T08:23:55');
 	  entity: 'training1').
@@ -198,7 +198,10 @@ IntegrationTest >> testReverseLink [
 	
 	tr := (res first comments detect: [ :c | c comment = 'Best training ever!' ]).
 	self assert: tr isNotNil.
-	self assert: tr timestamp asDate yyyymmdd equals: '2022-06-02'
+	self assert: tr timestamp asDate yyyymmdd equals: '2022-06-02'.
+	
+  self assert: tr author firstName equals: 'Carla'
+
 ]
 
 { #category : #tests }

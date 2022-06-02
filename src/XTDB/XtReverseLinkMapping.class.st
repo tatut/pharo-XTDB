@@ -36,3 +36,8 @@ XtReverseLinkMapping >> thisEntityField: anObject [
   setter := anObject,':'.
 
 ]
+
+{ #category : #'as yet unclassified' }
+XtReverseLinkMapping >> xtBuild: aDocumentBuilder document: doc from: instance [
+	"Do nothing, we don't store data or links to reverse linked entites."
+]

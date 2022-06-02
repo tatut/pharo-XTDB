@@ -81,6 +81,23 @@ XtLinkMapping >> valueToInstance: value [
 
 { #category : #'as yet unclassified' }
 XtLinkMapping >> xtBuild: aDocumentBuilder document: doc from: instance [
-	"Do nothing, we don't store changes to linked entites."
+  | val link idField get |
+  val := instance perform: getter.
+  val ifNil: [ ^ nil ].
+ 
+  idField := entityClass xtMapping fieldFor: #':xt/id'.
+  get := [ :v | v perform: idField ].
+ 
+  link := many 
+    ifTrue: [ val collect: #get as: OrderedCollection ]
+    ifFalse: [ get value: val ].
+
+  doc at: attribute put: link
 	
+	
+]
+
+{ #category : #'as yet unclassified' }
+XtLinkMapping >> xtPopulate: inst from: val [
+	^ super xtPopulate: inst from: val 
 ]

@@ -47,6 +47,12 @@ XtEntityMapping >> entityDiscriminator: anObject [
 	entityDiscriminator := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+XtEntityMapping >> fieldFor: attribute [
+	^ (fieldMappings detect: [ :fm | fm attribute = attribute ]
+		ifNone: [ Error signal: 'No XTDB field mapped for attribute: ', attribute ]) getter
+]
+
 { #category : #accessing }
 XtEntityMapping >> fieldMappings [
 
