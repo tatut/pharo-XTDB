@@ -41,7 +41,9 @@ XtEntityDiscriminator class >> attributePresent: attributeName [
 
 { #category : #converting }
 XtEntityDiscriminator >> asXtWhereClause [ 
-	^ XtWhereEAV new e: #e a: attribute v: (constantValue ifNil: [ #_ ] ifNotNil: #yourself)
+	constantValue 
+	  ifNil: [ ^ XtWhereEAPresent new e: #e a: attribute ]
+	  ifNotNil: [ :c | ^ XtWhereEAV new e: #e a: attribute v: c ]
 ]
 
 { #category : #accessing }

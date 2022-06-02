@@ -9,7 +9,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'url',
-		'znClient',
 		'txId'
 	],
 	#category : #XTDB
@@ -25,8 +24,8 @@ XtClient >> atTxId: aTxId [
 ]
 
 { #category : #'as yet unclassified' }
-XtClient >> awaitTx: txId [
-	^ self getRequest: 'await-tx' with: { 'tx-id' -> txId asString } as: XtTxInfo. 
+XtClient >> awaitTx: aTxId [
+	^ self getRequest: 'await-tx' with: { 'tx-id' -> aTxId asString } as: XtTxInfo. 
 ]
 
 { #category : #printing }
@@ -71,12 +70,11 @@ XtClient >> entity: id as: aClass [
 XtClient >> getRequest: path with: queryParameters as: aResultClass [
 	"Issue GET request to XTDB with given parameters"
 	| requestUrl response |
-	requestUrl := String streamContents: [:out |
-		out << url; << path.
-		queryParameters doWithIndex: [ :param :i |
-		    i = 1 ifTrue: [ out << '?' ] ifFalse: [ out << '&' ].
-			out << param key; << '='; << param value.
-	    ]].
+	requestUrl := url asZnUrl.
+	requestUrl addPathSegment: path.
+	queryParameters do: [ :param |
+		requestUrl queryAt: (param key) add: (param value)
+	].
 	response := self getZnClient 
 	  accept: 'application/edn';
 	  get: requestUrl.
@@ -101,7 +99,7 @@ XtClient >> instancesOf: anEntityClass [
 { #category : #parsing }
 XtClient >> parseResponse: response as: aClass [
 	| edn obj |
-	edn := EDNReader new in: response asString readStream; read.
+	edn := XtEDNReader new in: response asString readStream; read.
 	obj := aClass new.
 	aClass xtMapping xtPopulate: obj from: edn. 
   ^ obj
@@ -126,43 +124,30 @@ XtClient >> populateFieldsByName: anObject from: aDictionary [
 ]
 
 { #category : #'as yet unclassified' }
-XtClient >> q: aBlock [
-	"Build and execute query, returns raw response."
-	| qb |
-	qb := XtQueryBuilder new.
-	aBlock value: qb.
-	^ qb executeOn: self
+XtClient >> q: anEntityClass [
+	"Create a new query builder for the given entity class."
+	^ XtQueryBuilder new
+		xtClient: self;
+		entityClass: anEntityClass;
+		yourself
+
 ]
 
 { #category : #'as yet unclassified' }
 XtClient >> q: anEntityClass by: fieldAccessor value: value [
 	"Query instances of an entity class that match a predicate."
-	^ self q: anEntityClass matching: [ :e | (e perform: fieldAccessor) = value ]
+	^ self q: anEntityClass where: [ :e | (e perform: fieldAccessor) = value ]
 ]
 
 { #category : #'as yet unclassified' }
-XtClient >> q: anEntityClass matching: aPredicateBlock [
+XtClient >> q: anEntityClass where: aPredicateBlock [
 	"Query instances of an entity class that match a predicate."
-	| qb eb mapping where |
-	qb := XtQueryBuilder new.
-	qb result: (XtEntityPullMapping new entityClass: anEntityClass). 
-	mapping := anEntityClass xtMapping.
-	eb := XtEntityPredicateBuilder new 
-	  entity: #e;
-	  queryBuilder: qb;
-	  entityClass: anEntityClass;
-	  mapping: mapping.
-	qb pull: #e attrs: mapping asXtPullPattern. 
-  where := aPredicateBlock value: eb.
-  "Add entity discriminator, if present"
-  mapping entityDiscriminator ifNotNil: [ :ed |
-	  where := XtWhereAnd new add: ed asXtWhereClause; add: where; yourself ].
-  where := where simplify.
-	"Transcript show: (String streamContents: [:out | where renderToplevel writeEDNTo: out]); cr."
-	qb txId: txId.
-	qb setWhere: where renderToplevel.
-	qb setIn: where allInParameters.
-	^ qb executeOn: self
+	^ XtQueryBuilder new 
+		entityClass: anEntityClass;
+		xtClient: self;
+		where: aPredicateBlock;
+		execute
+		
 ]
 
 { #category : #accessing }
@@ -212,6 +197,11 @@ XtClient >> submitTx: txOps [
 		post.
 	^ self parseResponse: response as: XtTxInfo 
 
+]
+
+{ #category : #accessing }
+XtClient >> txId [ 
+ ^ txId
 ]
 
 { #category : #accessing }

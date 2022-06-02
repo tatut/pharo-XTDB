@@ -9,14 +9,15 @@ Class {
 		'gender',
 		'email',
 		'_xtId',
-		'company'
+		'company',
+		'dateOfBirth'
 	],
 	#category : #'XTDB-Examples'
 }
 
 { #category : #accessing }
 Person class >> xtMapping [
-	^ XtEntityMapping withAll: {  
+	^ (XtEntityMapping withAll: {  
     #':last-name' -> #lastName .
     #':first-name' -> #firstName .
     XtChildMapping of: #':address' -> #address to: Address .
@@ -24,8 +25,11 @@ Person class >> xtMapping [
     #':gender' -> #gender .
     #':email' -> #email .
     XtLinkMapping of: #':company' -> #company to: Company .
-    #':xt/id' -> #_xtId 
-  }
+    #':xt/id' -> #_xtId .
+    #':date-of-birth' -> #dateOfBirth })
+	entityDiscriminator: (XtEntityDiscriminator attributePresent: #':first-name');
+	yourself
+	
 ]
 
 { #category : #accessing }
@@ -67,6 +71,18 @@ Person >> company [
 Person >> company: anObject [
 
 	company := anObject
+]
+
+{ #category : #accessing }
+Person >> dateOfBirth [
+
+	^ dateOfBirth
+]
+
+{ #category : #accessing }
+Person >> dateOfBirth: anObject [
+
+	dateOfBirth := anObject
 ]
 
 { #category : #printing }
