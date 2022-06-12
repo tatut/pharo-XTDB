@@ -54,6 +54,13 @@ XtEntityPredicateAttrRef >> initialNode: anObject [
 	initialNode := anObject
 ]
 
+{ #category : #testing }
+XtEntityPredicateAttrRef >> isPresent [ 
+	"Check if this attribute is present (has any value, even nil) in the 
+	document."
+  ^ self wrap: (XtWhereEAPresent new e: entity a: attribute)
+]
+
 { #category : #'as yet unclassified' }
 XtEntityPredicateAttrRef >> nodeWithId: aNode [
 	aNode id: predicateBuilder nextIndex asString.

@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 XtEntityMapping class >> withAll: fieldMappings [
-	^ self new fieldMappings: (fieldMappings collect: #asXtFieldMapping); yourself
+	^ self new fieldMappings: (fieldMappings collect: #asXtFieldMapping as: OrderedCollection ); yourself
 ]
 
 { #category : #copying }
